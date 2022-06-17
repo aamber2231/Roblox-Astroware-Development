@@ -1,11 +1,16 @@
 -- New example script written by wally
 -- You can suggest changes with a pull request or something
 
+--#region UI Library
 local repo = 'https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/'
 
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 
+local Detached = false
+--#endregion
+
+--#region Window, Tabs, Groupboxes, etc
 local Window = Library:CreateWindow({
     Title = 'astroware',
     Center = true,
@@ -27,7 +32,16 @@ local Groupboxes = {
         LeftBoxOne = Tabs.Main:AddLeftGroupbox('General')
     }
 }
+--#endregion
 
+--#region Services
+local Players = game:GetService('Players')
+local RunService = game:GetService('RunService')
+local UserInputService = game:GetService('UserInputService')
+local CoreGui = game:GetService('CoreGui')
+--#endregion
+
+--#region Main Code, Properties
 local WalkSpeedSlider = Groupboxes.Main.LeftBoxOne:AddSlider('WalkSpeed', {
     Text = 'Walk Speed',
     Default = 16,
@@ -39,10 +53,14 @@ local WalkSpeedSlider = Groupboxes.Main.LeftBoxOne:AddSlider('WalkSpeed', {
 })
 
 Options.WalkSpeed:OnChanged(function ()
-
+	local character = Players.LocalPlayer.Character
+	character:SetPrimaryPartCFrame(character:GetPrimaryPartCFrame()*CFrame.new(0, 0, -0.5))
 end)
 
+--#endregion
+
 Library:OnUnload(function()
+    Detached = true
     print('Unloaded!')
     Library.Unloaded = true
 end)
